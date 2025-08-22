@@ -15,7 +15,7 @@ Mục tiêu của dự án là cung cấp các ví dụ rõ ràng, dễ hiểu v
 -   **Framework**: LangChain, LangGraph
 -   **Model ngôn ngữ (LLM)**: Google Gemini (cụ thể là `gemini-1.5-flash`)
 -   **Embeddings Model**: Ollama `bge-m3`
--   **Vector Store**: `InMemoryVectorStore` (Lưu trữ vector trong bộ nhớ)
+-   **Vector Store**: `Chroma` (lưu trữ bền vững) và `InMemoryVectorStore` (lưu trữ trong bộ nhớ)
 
 ## Cài đặt
 
@@ -56,12 +56,12 @@ Mục tiêu của dự án là cung cấp các ví dụ rõ ràng, dễ hiểu v
 
 ### `main.py`
 
--   **Mục đích**: Minh họa một quy trình RAG cơ bản nhất.
+-   **Mục đích**: Minh họa một quy trình RAG cơ bản nhất với khả năng lưu trữ vector bền vững.
 -   **Dựa trên hướng dẫn**: [LangChain RAG Tutorial](https://python.langchain.com/docs/tutorials/rag/)
 -   **Cách hoạt động**:
     1.  Script tải một tài liệu văn bản (trong trường hợp này là một bài báo tiếng Việt về chip Google Tensor).
     2.  Nó chia tài liệu thành các đoạn nhỏ (chunks) và tạo embeddings cho mỗi đoạn.
-    3.  Các embeddings được lưu trữ trong một `InMemoryVectorStore`.
+    3.  Các embeddings được lưu trữ bằng `Chroma` vào một thư mục trên đĩa (`./chroma_db`), giúp dữ liệu không bị mất sau mỗi lần chạy.
     4.  Khi có một câu hỏi, script sẽ tìm kiếm các đoạn văn bản liên quan nhất trong vector store.
     5.  Cuối cùng, nó gửi các đoạn văn bản đó cùng với câu hỏi đến LLM để tạo ra câu trả lời.
 -   **Luồng xử lý**: Sử dụng `langgraph` để định nghĩa một chuỗi xử lý đơn giản: `retrieve` -> `generate`.

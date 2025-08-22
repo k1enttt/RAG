@@ -10,12 +10,12 @@ if not os.environ.get("GOOGLE_API_KEY"):
 
 # --- LangChain Model & Embeddings ---
 from langchain.chat_models import init_chat_model
-from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 
 llm = init_chat_model("gemini-2.5-flash", model_provider="google_genai")
 embeddings = OllamaEmbeddings(model="bge-m3")
-vector_store = InMemoryVectorStore(embeddings)
+
 
 # --- Document Loading & Chunking ---
 import bs4
@@ -100,10 +100,13 @@ Thành ra, anh em hãy cứ yên tâm, là Google sẽ không từ bỏ nỗ l�
 
 docs = [Document(page_content=docs)]
 
-print(docs)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 all_splits = text_splitter.split_documents(docs)
-vector_store.add_documents(documents=all_splits)
+vector_store = Chroma.from_documents(
+    documents=all_splits,
+    embedding=embeddings,
+    persist_directory="./chroma_db"
+)
 
 # --- Prompt Setup ---
 prompt = hub.pull("rlm/rag-prompt")
@@ -124,8 +127,6 @@ def retrieve(state: State):
 
 def generate(state: State):
     docs_content = "\n\n".join(doc.page_content for doc in state["context"])
-    print("Đây là chunks được lấy: ")
-    print(docs_content)
     messages = prompt.invoke({"question": state["question"], "context": docs_content})
     response = llm.invoke(messages)
     return {"answer": response.content}

@@ -9,11 +9,11 @@ This project consists of a collection of Python scripts that demonstrate various
 - **Frameworks:** LangChain, LangGraph
 - **LLM:** Google Gemini (`gemini-1.5-flash`)
 - **Embeddings:** `OllamaEmbeddings` with the `bge-m3` model
-- **Vector Store:** `InMemoryVectorStore`
+- **Vector Store:** `Chroma` and `InMemoryVectorStore`
 
 **Architecture:**
 The project is structured into three distinct, runnable scripts, each illustrating a different implementation pattern:
-1.  `main.py`: A fundamental, non-conversational RAG pipeline.
+1.  `main.py`: A fundamental, non-conversational RAG pipeline that uses `Chroma` to persist the vector store to disk.
 2.  `rag-chains.py`: A conversational agent with memory, built using a custom-defined LangGraph graph.
 3.  `rag-agents.py`: A conversational agent with memory, built using the high-level `create_react_agent` constructor from LangGraph.
 
